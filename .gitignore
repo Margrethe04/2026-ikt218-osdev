@@ -18,3 +18,5 @@ src/group_name/src/kernel.c
 
 # generated build output
 build/
+
+build/
