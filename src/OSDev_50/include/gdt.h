@@ -1,6 +1,7 @@
 // include/gdt.h
 #pragma once
-#include <stdint.h>
+#include <libc/stdint.h>
+
 
 typedef struct {
     uint16_t limit_low;

@@ -1,14 +1,14 @@
-; src/gdt_flush.asm
-; Loads GDT and reloads segment registers
+; gdt_flush.asm
+; Laster GDTR med lgdt og reloader segmentregister (i386, 32-bit)
 
 BITS 32
 global gdt_flush
 
 gdt_flush:
-    mov eax, [esp+4]      ; pointer to gdt_ptr struct
+    mov eax, [esp+4]      ; argument: adresse til gdt_ptr/gdtr struct
     lgdt [eax]
 
-    ; Reload segment registers with DATA selector = 0x10
+    ; DATA selector = 0x10 (GDT entry 2)
     mov ax, 0x10
     mov ds, ax
     mov es, ax
@@ -16,7 +16,7 @@ gdt_flush:
     mov gs, ax
     mov ss, ax
 
-    ; Far jump to reload CS with CODE selector = 0x08
-    jmp 0x08:.flush_cs
-.flush_cs:
+    ; CODE selector = 0x08 (GDT entry 1)
+    jmp 0x08:.reload_cs
+.reload_cs:
     ret

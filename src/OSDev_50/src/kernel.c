@@ -2,10 +2,10 @@
 #include "gdt.h"
 #include "terminal.h"
 
-void main(uint32_t multiboot_magic, uint32_t multiboot_info_addr)
+void main(uint32_t mb_magic, uint32_t mb_info_addr)
 {
-    (void)multiboot_magic;
-    (void)multiboot_info_addr;
+    (void)mb_magic;
+    (void)mb_info_addr;
 
     gdt_init();
 
