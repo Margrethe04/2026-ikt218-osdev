@@ -7,5 +7,6 @@
 void terminal_initialize(void);
 void terminal_clear(void);
 void terminal_write(const char* str);
+void terminal_putc(char c);
 
 #endif

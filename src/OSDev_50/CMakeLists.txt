@@ -73,6 +73,10 @@ add_executable(uiaos-kernel
 	src/isr_asm.asm
     src/input.c
 
+	src/stdio.c
+	src/string.c
+	src/memutils.c
+	src/panic.c
 )
 
 

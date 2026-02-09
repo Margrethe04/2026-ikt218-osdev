@@ -5,6 +5,8 @@
 #include <interrupts.h>
 #include <keyboard.h>
 
+extern uint32_t end;
+
 void main(uint32_t mb_magic, uint32_t mb_info_addr)
 {
     (void)mb_magic;
@@ -17,6 +19,7 @@ void main(uint32_t mb_magic, uint32_t mb_info_addr)
 
     init_idt();
     init_irq();
+
     isr_register_default_prints();
     keyboard_init();
 

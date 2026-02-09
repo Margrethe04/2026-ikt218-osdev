@@ -68,3 +68,8 @@ void terminal_write(const char* str)
         put_char(str[i]);
     }
 }
+void terminal_putc(char c)
+{
+    put_char(c);
+}
+
