@@ -80,12 +80,12 @@ add_executable(uiaos-kernel
 	src/malloc.c
 	src/pit.c
 	src/memory.c
-	
+	src/song.c
 )
 
 
 # Include directories for the kernel target
-target_include_directories(uiaos-kernel PUBLIC include include/libc)
+target_include_directories(uiaos-kernel PUBLIC include include/libc include/song )
 
 
 # Specify compile options for C and C++

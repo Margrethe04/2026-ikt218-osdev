@@ -8,6 +8,7 @@
 #include "keyboard.h"
 #include "memory.h"
 #include "pit.h"
+#include "song/song.h"
 
 extern uint32_t end;
 
@@ -50,6 +51,10 @@ void main(uint32_t mb_magic, uint32_t mb_info_addr)
 
     __asm__ volatile ("sti");
 
+    printf("\nStarting music...\n");
+    play_music();
+    printf("Music finished.\n");
+    
     int counter = 0;
 
     for (int i = 0; i < 5; i++) {
