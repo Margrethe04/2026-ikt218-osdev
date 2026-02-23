@@ -1,47 +1,45 @@
 #include "pit.h"
-#include "common.h"
 #include "interrupts.h"
-#include "libc/stddef.h"
-#include <libc/stdio.h>
+#include "common.h"
+#include <libc/stddef.h>  // NULL
 
-static volatile uint32_t pit_ticks = 0;
+static volatile uint32_t ticks = 0;
 
-static void pit_irq_handler(registers_t* regs, void* ctx)
+static void pit_irq_handler(registers_t* regs, void* context)
 {
     (void)regs;
-    (void)ctx;
-    pit_ticks++;
+    (void)context;
+    ticks++;
 }
 
-void init_pit(void)
+void init_pit()
 {
-    outb(PIT_CMD_PORT, 0x36);
-
-    uint16_t divisor = (uint16_t)DIVIDER;
-    outb(PIT_CHANNEL0_PORT, (uint8_t)(divisor & 0xFF));
-    outb(PIT_CHANNEL0_PORT, (uint8_t)((divisor >> 8) & 0xFF));
-
     register_irq_handler(0, pit_irq_handler, NULL);
 
-    printf("PIT initialized\n");
-}
+    outb(PIT_CMD_PORT, 0x36); // channel 0, lobyte/hibyte, mode 3, binary
 
-static inline uint32_t get_tick(void)
-{
-    return pit_ticks;
-}
+    uint16_t divisor = (uint16_t)(PIT_BASE_FREQUENCY / TARGET_FREQUENCY);
+    uint8_t l_div = (uint8_t)(divisor & 0xFF);
+    uint8_t h_div = (uint8_t)((divisor >> 8) & 0xFF);
 
-void sleep_busy(uint32_t milliseconds)
-{
-    uint32_t start = get_tick();
-    while ((get_tick() - start) < milliseconds) {
-    }
+    outb(PIT_CHANNEL0_PORT, l_div);
+    outb(PIT_CHANNEL0_PORT, h_div);
 }
 
 void sleep_interrupt(uint32_t milliseconds)
 {
-    uint32_t end = get_tick() + milliseconds;
-    while (get_tick() < end) {
+    uint32_t end_ticks = ticks + (milliseconds * TICKS_PER_MS);
+
+    while (ticks < end_ticks) {
         asm volatile("sti; hlt");
+    }
+}
+
+void sleep_busy(uint32_t milliseconds)
+{
+    uint32_t end_ticks = ticks + (milliseconds * TICKS_PER_MS);
+
+    while (ticks < end_ticks) {
+        // busy wait
     }
 }

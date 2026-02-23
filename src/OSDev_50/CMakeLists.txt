@@ -81,6 +81,7 @@ add_executable(uiaos-kernel
 	src/pit.c
 	src/memory.c
 	src/song.c
+	src/starfield.c
 )
 
 

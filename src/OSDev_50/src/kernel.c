@@ -9,6 +9,7 @@
 #include "memory.h"
 #include "pit.h"
 #include "song/song.h"
+#include "starfield.h"
 
 extern uint32_t end;
 
@@ -48,6 +49,8 @@ void main(uint32_t mb_magic, uint32_t mb_info_addr)
     print_memory_layout();
 
     init_pit();
+    asm volatile ("sti");
+    starfield_run();
 
     __asm__ volatile ("sti");
 
