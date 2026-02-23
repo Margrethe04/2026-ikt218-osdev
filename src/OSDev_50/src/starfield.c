@@ -67,7 +67,6 @@ static char hex_digit(uint8_t v) {
 }
 
 void starfield_run(void) {
-    // Bruk malloc (viser memory management), men fallback hvis det skulle feile:
     Star* stars = (Star*)malloc(sizeof(Star) * N_STARS);
     static Star fallback[N_STARS];
     if (!stars) stars = fallback;
@@ -86,33 +85,25 @@ void starfield_run(void) {
 
         uint32_t n = keyboard_irq_count();
 
-// Vis de siste 4 hex-sifrene av telleren på topplinja (kol 70-75)
-vga_put(70, 0, hex_digit((n >> 12) & 0xF), 0x0F);
-vga_put(71, 0, hex_digit((n >>  8) & 0xF), 0x0F);
-vga_put(72, 0, hex_digit((n >>  4) & 0xF), 0x0F);
-vga_put(73, 0, hex_digit((n >>  0) & 0xF), 0x0F);
+        vga_put(70, 0, hex_digit((n >> 12) & 0xF), 0x0F);
+        vga_put(71, 0, hex_digit((n >>  8) & 0xF), 0x0F);
+        vga_put(72, 0, hex_digit((n >>  4) & 0xF), 0x0F);
+        vga_put(73, 0, hex_digit((n >>  0) & 0xF), 0x0F);
 
-        // Debug: vis scancode øverst til høyre (kol 76-79)
         if (sc) {
             vga_put(76, 0, '0', 0x0F);
             vga_put(77, 0, 'x', 0x0F);
             vga_put(78, 0, hex_digit(sc >> 4), 0x0F);
             vga_put(79, 0, hex_digit(sc),      0x0F);
         }
-
-        // Kontroller: støtt både Set 1 og Set 2 (Q/W/R/S)
-        // Q: set1=0x10, set2=0x15
         if (sc == 0x10 || sc == 0x15) break;
 
-        // R: set1=0x13, set2=0x2D
         if (sc == 0x13 || sc == 0x2D) init_stars(stars, N_STARS);
 
-        // W: set1=0x11, set2=0x1D
         if (sc == 0x11 || sc == 0x1D) {
             if (delay_ms > 10) delay_ms -= 10;
         }
 
-        // S: set1=0x1F, set2=0x1B
         if (sc == 0x1F || sc == 0x1B) {
             if (delay_ms < 200) delay_ms += 10;
         }
