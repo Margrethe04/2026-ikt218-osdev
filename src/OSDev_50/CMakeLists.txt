@@ -77,6 +77,10 @@ add_executable(uiaos-kernel
 	src/string.c
 	src/memutils.c
 	src/panic.c
+	src/malloc.c
+	src/pit.c
+	src/memory.c
+	
 )
 
 
